@@ -18,6 +18,7 @@ avaList = []
 def start(update, context):
     """Send a message when the command /start is issued."""
     output = """特別嗚謝可愛嘅路過!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 1.2"""
+    groupid = update.message.chat.id
     global avaList
     avaList = []
     update.message.reply_text(output)
@@ -63,8 +64,6 @@ def show(update, context):
          input = "{0}. {1} {2}".format(counter, i["updater"], i["gameName"])
          output = output+input
          counter +=1
-
-    output = avaList
 
     update.message.reply_text(output) 
 
