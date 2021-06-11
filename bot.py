@@ -10,11 +10,16 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 TOKEN = '1601794899:AAFYCbypGF4UT-LW5WPlIXSmLodW2257vQI'
 
+#variable list
+avaList = []
+
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
+    output = """特別嗚謝可愛嘅路過!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 1.2"""
+    avaList = []
+    update.message.reply_text(output)
 
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -23,19 +28,54 @@ def help(update, context):
     所有資料被第三方改動,路過不會負責~~ (我懶)\n
     1. /start \t 唔好亂用 !!佢會restart個bot同清空record!!\n
     2. /join [name] \t 如果得閒打族戰就報名la\n
-    3. /sorry [name] \t Sor9ly, 是日要陪女陪腦細,打唔到 QWQ\n
     4. /delete [name] \t 哎? ざんねん~ 原來我都係唔得閒打.. \n
-    5. /fuck [name] \t 頂,終於做完野~~可以打得~~\n
-    6. /show \t 出結果\n
+    6. /show \t 出List\n
     7. /close \t 898 \n
     8. /help \t 召喚我 \n\n
     仲有冇咩唔明? 但就算有我都幫你唔到 :P """
     update.message.reply_text(output)
 
 def join(update, context):
-    input = update.message.text[6:]
-    output = "You are"+update.message.from_user.full_name+",input"+input
-    update.message.reply_text(output)
+    try:
+        input = update.message.text[6:]
+        item = {"updater":update.message.from_user.full_name,"gameName":input,"id":update.message.from_user.id}
+        avaList.append(item)
+        output = """Input Successful"""
+        update.message.reply_text(output)
+    except:
+        output = """Error"""
+        update.message.reply_text(output) 
+
+def show(update, context):
+    output = """全體成員，今個星期六/日20:00-21:00家族戰，會出戰請在下方留名，要預先安排崗位\n
+
+                    :bangbang:參加者必須參與兩場團體戰一場個人戰:bangbang: \n
+
+                    :warning:無指定時間會視為隨時侯命:warning: \n"""
+    counter = 0
+    for i in avaList:
+         input = counter+". "+i["updater"]+" "+i["gameName"]+"\n"
+         output += input
+         counter +=1
+
+    update.message.reply_text(output) 
+
+def delete(update,context):
+    input = update.message.text[8:]
+    try:
+        id = update.message.from_user.id
+        counter =  0
+        for i in avaList:
+            if (i["id"]==id and i["gameName"]==input):
+                avaList.pop(counter)
+                break
+            counter +=1
+    except:
+        output = """Error"""
+        update.message.reply_text(output)
+
+
+
 
 def echo(update, context):
     """Echo the user message."""
@@ -59,9 +99,10 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("join", join))
+    dp.add_handler(CommandHandler("show", show))
 
     # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, echo))
+    # dp.add_handler(MessageHandler(Filters.text, echo))
 
     # log all errors
     dp.add_error_handler(error)
