@@ -21,7 +21,7 @@ def start(update, context):
     groupid = update.message.chat.id
     global avaList
     avaList = []
-    update.message.reply_text(output)
+    update.message.reply_text(groupid)
 
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -55,9 +55,9 @@ def join(update, context):
 def show(update, context):
     output = """全體成員，今個星期六/日20:00-21:00家族戰，會出戰請在下方留名，要預先安排崗位
 
-        !!參加者必須參與兩場團體戰一場個人戰!! 
+    !!參加者必須參與兩場團體戰一場個人戰!! 
 
-        ⚠ :無指定時間會視為隨時侯命 ⚠ """
+    ⚠ :無指定時間會視為隨時侯命 ⚠ \n"""
     counter = 0
     global avaList
     for i in avaList:
