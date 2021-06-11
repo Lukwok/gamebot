@@ -17,10 +17,13 @@ avaList = []
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    output = """特別嗚謝可愛嘅路過!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 1.2"""
+    output = """特別嗚謝可愛嘅路過!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 1.3"""
     groupid = update.message.chat.id
-    global avaList
-    avaList = []
+
+    #only Auto and admin group can empty list
+    if (groupid == "-515223688" or groupid =="816970229"):
+        global avaList
+        avaList = []
     update.message.reply_text(groupid)
 
 def help(update, context):
@@ -57,8 +60,8 @@ def show(update, context):
 
     !!參加者必須參與兩場團體戰一場個人戰!! 
 
-    ⚠ :無指定時間會視為隨時侯命 ⚠ \n"""
-    counter = 0
+    ⚠ :無指定時間會視為隨時侯命 ⚠ \n\n"""
+    counter = 1
     global avaList
     for i in avaList:
          input = "{0}. {1} {2}".format(counter, i["updater"], i["gameName"])
@@ -77,12 +80,17 @@ def delete(update,context):
             for i in avaList:
                 if (i["id"]==id and i["gameName"]==input):
                     avaList.pop(counter)
+                    output = """Delete Sucessfully"""
+                    update.message.reply_text(output)
                     break
                 counter +=1
         else: raise Exception()
     except:
         output = """Error"""
         update.message.reply_text(output)
+
+def close(update,context):
+    update.message.reply_text("Sor9, 未得閒做住~~")
 
 
 
@@ -111,6 +119,7 @@ def main():
     dp.add_handler(CommandHandler("join", join))
     dp.add_handler(CommandHandler("show", show))
     dp.add_handler(CommandHandler("delete", delete))
+    dp.add_handler(CommandHandler("close", close))
 
     # on noncommand i.e message - echo the message on Telegram
     # dp.add_handler(MessageHandler(Filters.text, echo))
