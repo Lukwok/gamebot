@@ -59,14 +59,14 @@ def show(update, context):
         ⚠ :無指定時間會視為隨時侯命 ⚠ """
     counter = 0
     global avaList
-    # for i in avaList:
-    #      input = "{0}. {1} {2}".format(counter, i["uploader"], i["gameName"])
-    #      output = output+input
-    #      counter +=1
+    for i in avaList:
+         input = "{0}. {1} {2}".format(counter, i["updater"], i["gameName"])
+         output = output+input
+         counter +=1
 
-    # output = avaList
+    output = avaList
 
-    update.message.reply_text(avaList[0].uploader) 
+    update.message.reply_text(output) 
 
 def delete(update,context):
     input = update.message.text[8:]
