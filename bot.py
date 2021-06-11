@@ -18,6 +18,7 @@ avaList = []
 def start(update, context):
     """Send a message when the command /start is issued."""
     output = """特別嗚謝可愛嘅路過!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 1.2"""
+    global avaList
     avaList = []
     update.message.reply_text(output)
 
@@ -39,6 +40,7 @@ def join(update, context):
     try:
         input = update.message.text[6:]
         if input:
+            global avaList
             item = {"updater":update.message.from_user.full_name,"gameName":input,"id":update.message.from_user.id}
             avaList.append(item)
             output = """Input Successful"""
@@ -52,27 +54,33 @@ def join(update, context):
 def show(update, context):
     output = """全體成員，今個星期六/日20:00-21:00家族戰，會出戰請在下方留名，要預先安排崗位\n
 
-                    :bangbang:參加者必須參與兩場團體戰一場個人戰:bangbang: \n
+                    !!參加者必須參與兩場團體戰一場個人戰!! \n
 
-                    :warning:無指定時間會視為隨時侯命:warning: \n"""
+                    ⚠ :無指定時間會視為隨時侯命 ⚠ \n"""
     counter = 0
+    global avaList
     for i in avaList:
          input = format("""%i. %s %s""",counter,i["updater"],i["gameName"])
          output = output+input
          counter +=1
+
+    # output = avaList
 
     update.message.reply_text(output) 
 
 def delete(update,context):
     input = update.message.text[8:]
     try:
-        id = update.message.from_user.id
-        counter =  0
-        for i in avaList:
-            if (i["id"]==id and i["gameName"]==input):
-                avaList.pop(counter)
-                break
-            counter +=1
+        if input:
+            id = update.message.from_user.id
+            counter =  0
+            global avaList
+            for i in avaList:
+                if (i["id"]==id and i["gameName"]==input):
+                    avaList.pop(counter)
+                    break
+                counter +=1
+        else: raise Exception()
     except:
         output = """Error"""
         update.message.reply_text(output)
