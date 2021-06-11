@@ -33,9 +33,9 @@ def help(update, context):
     update.message.reply_text(output)
 
 def join(bot,update):
-    id = update.message.chat.id
-    output = "halo"+update.message.from_user.full_name+", your id is"+id
-    bot.send_message(id,output)
+    input = update.message.text[6:]
+    output = "You are"+update.message.from_user.full_name+",input"+input
+    update.message.reply_text(output)
 
 def echo(update, context):
     """Echo the user message."""
