@@ -32,7 +32,7 @@ def help(update, context):
     仲有冇咩唔明? 但就算有我都幫你唔到 :P """
     update.message.reply_text(output)
 
-def join(bot,update):
+def join(update, context):
     input = update.message.text[6:]
     output = "You are"+update.message.from_user.full_name+",input"+input
     update.message.reply_text(output)
