@@ -24,7 +24,7 @@ def start(update, context):
     if (groupid == "-515223688" or groupid =="816970229"):
         global avaList
         avaList = []
-    update.message.reply_text(groupid)
+    update.message.reply_text(output)
 
 def help(update, context):
     """Send a message when the command /help is issued."""
