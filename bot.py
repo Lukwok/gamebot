@@ -38,10 +38,13 @@ def help(update, context):
 def join(update, context):
     try:
         input = update.message.text[6:]
-        item = {"updater":update.message.from_user.full_name,"gameName":input,"id":update.message.from_user.id}
-        avaList.append(item)
-        output = """Input Successful"""
-        update.message.reply_text(output)
+        if input:
+            item = {"updater":update.message.from_user.full_name,"gameName":input,"id":update.message.from_user.id}
+            avaList.append(item)
+            output = """Input Successful"""
+            update.message.reply_text(output)
+        else:
+            raise Exception()
     except:
         output = """Error"""
         update.message.reply_text(output) 
@@ -54,8 +57,8 @@ def show(update, context):
                     :warning:無指定時間會視為隨時侯命:warning: \n"""
     counter = 0
     for i in avaList:
-         input = counter+". "+i["updater"]+" "+i["gameName"]+"\n"
-         output += input
+         input = format("""%i. %s %s""",counter,i["updater"],i["gameName"])
+         output = output+input
          counter +=1
 
     update.message.reply_text(output) 
@@ -100,6 +103,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("join", join))
     dp.add_handler(CommandHandler("show", show))
+    dp.add_handler(CommandHandler("delete", delete))
 
     # on noncommand i.e message - echo the message on Telegram
     # dp.add_handler(MessageHandler(Filters.text, echo))
