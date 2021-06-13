@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 TOKEN = '1601794899:AAEovIDGRihYeIhET5JD-l59-cG1DIgQ2-w'
 
 #variable list
-# avaList = []
+avaList = []
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
