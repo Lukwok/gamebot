@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 TOKEN = '1601794899:AAEovIDGRihYeIhET5JD-l59-cG1DIgQ2-w'
 
 #variable list
-avaList = []
+# avaList = []
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -99,7 +99,7 @@ def close(update,context):
 def sushow(update,context):
     groupid = update.message.chat.id
     output = "Admin Right Coding 100\n Display list in detail \n Index Uploader GameName"
-    if (groupid == "-515223688" or update.message.from_user.id =="816970229"):
+    if (groupid == "-515223688" or str(update.message.from_user.id) =="816970229"):
         counter = 1
         global avaList
         for i in avaList:
@@ -112,7 +112,7 @@ def sushow(update,context):
 def sudelete(update,context):
     groupid = update.message.chat.id
     input = update.message.text[10:]
-    if (groupid == "-515223688" or update.message.from_user.id =="816970229"):
+    if (groupid == "-515223688" or str(update.message.from_user.id)=="816970229"):
         try:
             if input:
                 counter =  0
