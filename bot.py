@@ -21,7 +21,7 @@ def start(update, context):
     groupid = update.message.chat.id
 
     #only Auto and admin group can empty list
-    if (groupid == "-515223688" or groupid =="816970229"):
+    if (groupid == "-515223688" or update.message.from_user.id =="816970229"):
         global avaList
         avaList = []
     update.message.reply_text(output)
@@ -99,7 +99,7 @@ def close(update,context):
 def sushow(update,context):
     groupid = update.message.chat.id
     output = "Admin Right Coding 100\n Display list in detail \n Index Uploader GameName"
-    if (groupid == "-515223688" or groupid =="816970229"):
+    if (groupid == "-515223688" or update.message.from_user.id =="816970229"):
         counter = 1
         global avaList
         for i in avaList:
@@ -112,7 +112,7 @@ def sushow(update,context):
 def sudelete(update,context):
     groupid = update.message.chat.id
     input = update.message.text[10:]
-    if (groupid == "-515223688" or groupid =="816970229"):
+    if (groupid == "-515223688" or update.message.from_user.id =="816970229"):
         try:
             if input:
                 counter =  0
@@ -179,6 +179,8 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
+
+    #myid816970229
 
 if __name__ == '__main__':
     main()
