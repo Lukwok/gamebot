@@ -17,7 +17,7 @@ avaList = []
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    output = """特別嗚謝可愛嘅路過!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 1.3"""
+    output = """特別嗚謝可愛嘅路過!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 1.4"""
     groupid = update.message.chat.id
 
     #only Auto and admin group can empty list
@@ -64,7 +64,7 @@ def show(update, context):
     counter = 1
     global avaList
     for i in avaList:
-         input = "{0}. {1} {2}".format(counter, i["updater"], i["gameName"])
+         input = "{0}. {1} {2} \n".format(counter, i["updater"], i["gameName"])
          output = output+input
          counter +=1
 
