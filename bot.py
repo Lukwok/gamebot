@@ -18,10 +18,10 @@ avaList = []
 def start(update, context):
     """Send a message when the command /start is issued."""
     output = """特別嗚謝可愛嘅路過!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 1.3"""
-    groupid = update.message.chat.id
+    groupid = str(update.message.chat.id)
 
     #only Auto and admin group can empty list
-    if (groupid == "-515223688" or update.message.from_user.id =="816970229"):
+    if (groupid == "-515223688" or str(update.message.from_user.id) =="816970229"):
         global avaList
         avaList.clear()
     update.message.reply_text(output)
@@ -33,11 +33,12 @@ def help(update, context):
 所有資料被第三方改動,路過不會負責~~ (我懶)\n
 1. /start \t 唔好亂用 !!佢會restart個bot同清空record!!\n
 2. /join [name] \t 如果得閒打族戰就報名la\n
-4. /delete [name] \t 哎? ざんねん~ 原來我都係唔得閒打.. \n
+4. /delete [name] \t 哎? 原來都係唔得閒打.. \n
 6. /show \t 出List\n
 7. /close \t 898 \n
 8. /help \t 召喚我 \n
 **e.g. 如果路過想報名 請輸入: /join 路過** \n
+**e.g. 如果路過想走數 請輸入: /delete 路過** \n
 仲有冇咩唔明? 但就算有我都幫你唔到 :P """
     update.message.reply_text(output)
 
@@ -97,8 +98,8 @@ def close(update,context):
     update.message.reply_text("Sor9, 未得閒做住~~")
 
 def sushow(update,context):
-    groupid = update.message.chat.id
-    output = "Admin Right Coding 100\n Display list in detail \n Index Uploader GameName"
+    groupid = str(update.message.chat.id)
+    output = "Admin Right Coding 100\n Display list in detail \n Index Uploader GameName\n"
     if (groupid == "-515223688" or str(update.message.from_user.id) =="816970229"):
         counter = 1
         global avaList
@@ -110,7 +111,7 @@ def sushow(update,context):
         update.message.reply_text(output) 
 
 def sudelete(update,context):
-    groupid = update.message.chat.id
+    groupid = str(update.message.chat.id)
     input = update.message.text[10:]
     if (groupid == "-515223688" or str(update.message.from_user.id)=="816970229"):
         try:
