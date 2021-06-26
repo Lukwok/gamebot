@@ -21,7 +21,7 @@ avaList = []
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    output = """特別嗚謝可愛嘅路過!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 3.0"""
+    output = """特別嗚謝路過同3妹(自肥中)!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 3.0"""
     groupid = str(update.message.chat.id)
     
 
@@ -37,7 +37,7 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    output = """皆さん~ 路過sansan 教你點用 <3 \n
+    output = """皆さん~ 3妹sansan 教你點用 <3 \n
 注意!! 此乃路過一日亂整出黎! 請不要同人分享或自己亂玩\n
 所有資料被第三方改動,路過不會負責~~ (我懶)\n
 1. /start \t 唔好亂用 !!佢會restart個bot同清空record!!\n
@@ -122,6 +122,7 @@ def sudelete(update,context):
         try:
             if input:
                 db.delete_item(input)
+                show(update,context)
             else: raise Exception()
         except:
             output = """Error"""
