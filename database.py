@@ -2,6 +2,38 @@ from os import system
 import sqlite3
 from sqlite3.dbapi2 import Cursor
 
+#using mongodb
+from pymongo import MongoClient
+from pprint import pprint
+import certifi
+
+class MongoDBHelper:
+    def __init__(self):
+        self.client = MongoClient("mongodb://admin01:admin01@cluster0-shard-00-00.l8tud.mongodb.net:27017,cluster0-shard-00-01.l8tud.mongodb.net:27017,cluster0-shard-00-02.l8tud.mongodb.net:27017/todo?ssl=true&replicaSet=atlas-2mwwjb-shard-0&authSource=admin&retryWrites=true&w=majority", tlsCAFile=certifi.where())
+        self.db = self.client.todo
+
+    def setup(self):
+        print ("done")
+
+    def add_user(self, updater, gameName,id):
+        query = {"updater":str(updater),"gameName":str(gameName),"id":str(id)}
+        self.db.joinList.insert(query)
+        print ("Add sucessfully")
+    
+    def delete_user(self,gameName):
+        query = {"gameName":str(gameName)}
+        self.db.joinList.delete_one(query)
+
+    def delete_by_id(self,gameName,id):
+        query = {"gameName":str(gameName),"id":str(id)}
+        self.db.joinList.delete_one(query)
+
+    def show_user(self):
+        data = list(self.db.joinList.find())
+        return data
+
+    def remove_db(self):
+        self.db.joinList.remove()
 
 class DBHelper:
     def __init__(self, dbname="todo.sqlite"):
@@ -20,7 +52,7 @@ class DBHelper:
         self.conn.execute(query, args)
         self.conn.commit()
 
-    def delete_item(self, gameName):
+    def delete_user(self, gameName):
         query = "DELETE FROM joinList WHERE gameName = (?) "
         args = (gameName,)
         self.conn.execute(query,args)
@@ -32,7 +64,7 @@ class DBHelper:
         self.conn.execute(query, args)
         self.conn.commit()
 
-    def get_items(self):
+    def show_user(self):
         cusor = self.conn.cursor()
         query = "SELECT * FROM joinList"
         cusor.execute(query)
