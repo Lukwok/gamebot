@@ -18,7 +18,6 @@ class MongoDBHelper:
     def add_user(self, updater, gameName,id):
         query = {"updater":str(updater),"gameName":str(gameName),"id":str(id)}
         self.db.joinList.insert(query)
-        print ("Add sucessfully")
     
     def delete_user(self,gameName):
         query = {"gameName":str(gameName)}
