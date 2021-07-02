@@ -1,9 +1,10 @@
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
-from database import DBHelper
+from database import DBHelper,MongoDBHelper
 
 db = DBHelper()
+mdb = MongoDBHelper()
 
 PORT = int(os.environ.get('PORT', 5000))    
 
@@ -12,7 +13,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = 'YOUR_TOKEN'
+TOKEN = '1601794899:AAEovIDGRihYeIhET5JD-l59-cG1DIgQ2-w'
 
 #variable list
 avaList = []
@@ -21,7 +22,7 @@ avaList = []
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    output = """特別嗚謝路過同3妹(自肥中)!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 3.0"""
+    output = """特別嗚謝路過&3妹!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 3.5"""
     groupid = str(update.message.chat.id)
     
 
@@ -30,8 +31,9 @@ def start(update, context):
         # global avaList
         # avaList.clear()
         """init database"""
-        db.remove_db()
-        db.setup()
+        # db.remove_db()
+        # db.setup()
+        mdb.remove_db()
 
     update.message.reply_text(output)
 
@@ -59,7 +61,8 @@ def join(update, context):
             # item = {"updater":update.message.from_user.full_name,"gameName":input,"id":update.message.from_user.id}
             # avaList.append(item)
 
-            db.add_user(update.message.from_user.full_name,input,update.message.from_user.id)
+            # db.add_user(update.message.from_user.full_name,input,update.message.from_user.id)
+            mdb.add_user(update.message.from_user.full_name,input,update.message.from_user.id)
 
             show(update,context)
 
@@ -77,13 +80,13 @@ def show(update, context):
 ⚠ :無指定時間會視為隨時侯命 ⚠ \n\n"""
     counter = 1
     # global avaList
-    data = db.get_items()
-    for (updater, gameName, id) in data:
-         input = "{0}. {1} \n".format(counter, gameName)
+    #data = db.show_user()
+    data = mdb.show_user()
+
+    for d in data:
+         input = "{0}. {1} \n".format(counter, d["gameName"])
          output = output+input
          counter +=1
-
-
 
     update.message.reply_text(output) 
 
@@ -92,7 +95,8 @@ def delete(update,context):
     try:
         if input:
             id = update.message.from_user.id
-            db.delete_user_by_id(input,id)
+            # db.delete_user_by_id(input,id)
+            mdb.delete_by_id(input,id)
             show(update,context)
         else: raise Exception()
     except:
@@ -107,12 +111,12 @@ def sushow(update,context):
     output = "Admin Right Coding 100\n Display list in detail \n Index Uploader GameName\n"
     if (groupid == "-515223688" or str(update.message.from_user.id) =="816970229"):
         counter = 1
-        data = db.get_items()
-        for (updater, gameName, id) in data:
-            input = "{0}. {1} {2} \n".format(counter, updater, gameName)
+        # data = db.show_user()
+        data = mdb.show_user()
+        for d in data:
+            input = "{0}. {1} {2} \n".format(counter, d["updater"], d["gameName"])
             output = output+input
             counter +=1
-
         update.message.reply_text(output) 
 
 def sudelete(update,context):
@@ -121,7 +125,8 @@ def sudelete(update,context):
     if (groupid == "-515223688" or str(update.message.from_user.id)=="816970229"):
         try:
             if input:
-                db.delete_item(input)
+                # db.delete_item(input)
+                mdb.delete_user(input)
                 show(update,context)
             else: raise Exception()
         except:
@@ -131,10 +136,10 @@ def sudelete(update,context):
 
 def echo(update, context):
     """Echo the user message."""
-    groupid = update.message.chat.id
-    personalid = update.message.from_user.id
+    groupid = str(update.message.chat.id)
+    personalid = str(update.message.from_user.id)
     output = "Group: "+groupid+" Personal: "+personalid
-    update.message.reply_text(output)
+    print(output)
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -168,13 +173,13 @@ def main():
     dp.add_error_handler(error)
 
     """Start the Bot by webhook"""
-    updater.start_webhook(listen="0.0.0.0",
-                          port=int(PORT),
-                          url_path=TOKEN)
-    updater.bot.setWebhook('https://holanlovehk-tgbot.herokuapp.com/' + TOKEN)
+    # updater.start_webhook(listen="0.0.0.0",
+    #                       port=int(PORT),
+    #                       url_path=TOKEN)
+    # updater.bot.setWebhook('https://holanlovehk-tgbot.herokuapp.com/' + TOKEN)
 
     """start bot by polling (testing code use)"""
-    # updater.start_polling()
+    updater.start_polling()
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
