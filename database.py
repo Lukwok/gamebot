@@ -9,7 +9,7 @@ import certifi
 
 class MongoDBHelper:
     def __init__(self):
-        self.client = MongoClient("mongodb://admin01:admin01@cluster0-shard-00-00.l8tud.mongodb.net:27017,cluster0-shard-00-01.l8tud.mongodb.net:27017,cluster0-shard-00-02.l8tud.mongodb.net:27017/todo?ssl=true&replicaSet=atlas-2mwwjb-shard-0&authSource=admin&retryWrites=true&w=majority", tlsCAFile=certifi.where())
+        self.client = MongoClient("YOUR_MONGODB_LINK", tlsCAFile=certifi.where())
         self.db = self.client.todo
 
     def setup(self):
