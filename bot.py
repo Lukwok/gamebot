@@ -13,7 +13,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = 'YOURTOKEN'
+TOKEN = '1601794899:AAFYCbypGF4UT-LW5WPlIXSmLodW2257vQI'
 
 #variable list
 avaList = []
@@ -22,7 +22,8 @@ avaList = []
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-    output = """特別嗚謝路過&3妹!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 3.5"""
+    #output = """特別嗚謝路過&3妹!! >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 3.5"""
+    output = """去死la 3妹 QWQ 唔原諒你 >W< \n全體成員, 家族戰報名表 (六/日20:00-21:00) Version 3.5"""
     groupid = str(update.message.chat.id)
     
 
@@ -39,7 +40,19 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    output = """皆さん~ 3妹sansan 教你點用 <3 \n
+    #output = """皆さん~ 3妹sansan 教你點用 <3 \n
+#注意!! 此乃路過一日亂整出黎! 請不要同人分享或自己亂玩\n
+#所有資料被第三方改動,路過不會負責~~ (我懶)\n
+#1. /start \t 唔好亂用 !!佢會restart個bot同清空record!!\n
+#2. /join [name] \t 如果得閒打族戰就報名la\n
+#4. /delete [name] \t 哎? 原來都係唔得閒打.. \n
+#6. /show \t 出List\n
+#7. /close \t 898 \n
+#8. /help \t 召喚我 \n
+#**e.g. 如果路過想報名 請輸入: /join 路過** \n
+#**e.g. 如果路過想走數 請輸入: /delete 路過** \n
+#仲有冇咩唔明? 但就算有我都幫你唔到 :P """
+    output = """路過憎死3妹 \ 口 / \n
 注意!! 此乃路過一日亂整出黎! 請不要同人分享或自己亂玩\n
 所有資料被第三方改動,路過不會負責~~ (我懶)\n
 1. /start \t 唔好亂用 !!佢會restart個bot同清空record!!\n
@@ -73,7 +86,7 @@ def join(update, context):
         update.message.reply_text(output) 
 
 def show(update, context):
-    output = """全體成員，今個星期六/日20:00-21:00家族戰，會出戰請在下方留名，要預先安排崗位
+    output = """diu nei 3妹 正衰人!! (╯°□°）╯︵ (\ .o.)\\n 全體成員，今個星期六/日20:00-21:00家族戰，會出戰請在下方留名，要預先安排崗位
 
 !!參加者必須參與兩場團體戰一場個人戰!! 
 
