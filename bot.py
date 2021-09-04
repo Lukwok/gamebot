@@ -13,7 +13,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-TOKEN = '1601794899:AAEovIDGRihYeIhET5JD-l59-cG1DIgQ2-w'
+TOKEN = 'YOURTOKEN'
 
 #variable list
 avaList = []
