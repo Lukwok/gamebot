@@ -86,7 +86,7 @@ def join(update, context):
         update.message.reply_text(output) 
 
 def show(update, context):
-    output = """diu nei 3妹 正衰人!! (╯°□°）╯︵ (\ .o.)\\n 全體成員，今個星期六/日20:00-21:00家族戰，會出戰請在下方留名，要預先安排崗位
+    output = """diu nei 3妹 正衰人!! (╯°□°）╯︵ (\ .o.)\ \n 全體成員，今個星期六/日20:00-21:00家族戰，會出戰請在下方留名，要預先安排崗位
 
 !!參加者必須參與兩場團體戰一場個人戰!! 
 
