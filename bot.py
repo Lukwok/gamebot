@@ -1,6 +1,11 @@
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
+from database import DBHelper,MongoDBHelper
+
+db = DBHelper()
+mdb = MongoDBHelper()
+
 PORT = int(os.environ.get('PORT', 5000))    
 
 # Enable logging
@@ -19,16 +24,22 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     output = """全體成員, 家族戰報名表 (六/日20:00-21:00) Version 3.5"""
     groupid = str(update.message.chat.id)
+    
 
     #only Auto and admin group can empty list
     if (groupid == "-515223688" or str(update.message.from_user.id) =="816970229"):
-        global avaList
-        avaList.clear()
+        # global avaList
+        # avaList.clear()
+        """init database"""
+        # db.remove_db()
+        # db.setup()
+        mdb.remove_db()
+
     update.message.reply_text(output)
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    output = """皆さん~ 路過sansan 教你點用 <3 \n
+    output = """
 注意!! 此乃路過一日亂整出黎! 請不要同人分享或自己亂玩\n
 所有資料被第三方改動,路過不會負責~~ (我懶)\n
 1. /start \t 唔好亂用 !!佢會restart個bot同清空record!!\n
@@ -46,11 +57,13 @@ def join(update, context):
     try:
         input = update.message.text[6:]
         if input:
-            global avaList
-            item = {"updater":update.message.from_user.full_name,"gameName":input,"id":update.message.from_user.id}
-            avaList.append(item)
-            # output = """Input Successful"""
-            # update.message.reply_text(output)
+            # global avaList
+            # item = {"updater":update.message.from_user.full_name,"gameName":input,"id":update.message.from_user.id}
+            # avaList.append(item)
+
+            # db.add_user(update.message.from_user.full_name,input,update.message.from_user.id)
+            mdb.add_user(update.message.from_user.full_name,input,update.message.from_user.id)
+
             show(update,context)
 
         else:
@@ -66,9 +79,12 @@ def show(update, context):
 
 ⚠ :無指定時間會視為隨時侯命 ⚠ \n\n"""
     counter = 1
-    global avaList
-    for i in avaList:
-         input = "{0}. {1} \n".format(counter, i["gameName"])
+    # global avaList
+    #data = db.show_user()
+    data = mdb.show_user()
+
+    for d in data:
+         input = "{0}. {1} \n".format(counter, d["gameName"])
          output = output+input
          counter +=1
 
@@ -79,16 +95,9 @@ def delete(update,context):
     try:
         if input:
             id = update.message.from_user.id
-            counter =  0
-            global avaList
-            for i in avaList:
-                if (i["id"]==id and i["gameName"]==input):
-                    avaList.pop(counter)
-                    # output = """Delete Sucessfully"""
-                    # update.message.reply_text(output)
-                    show(update,context)
-                    break
-                counter +=1
+            # db.delete_user_by_id(input,id)
+            mdb.delete_by_id(input,id)
+            show(update,context)
         else: raise Exception()
     except:
         output = """Error"""
@@ -102,12 +111,12 @@ def sushow(update,context):
     output = "Admin Right Coding 100\n Display list in detail \n Index Uploader GameName\n"
     if (groupid == "-515223688" or str(update.message.from_user.id) =="816970229"):
         counter = 1
-        global avaList
-        for i in avaList:
-            input = "{0}. {1} {2} \n".format(counter, i["updater"], i["gameName"])
+        # data = db.show_user()
+        data = mdb.show_user()
+        for d in data:
+            input = "{0}. {1} {2} \n".format(counter, d["updater"], d["gameName"])
             output = output+input
             counter +=1
-
         update.message.reply_text(output) 
 
 def sudelete(update,context):
@@ -116,16 +125,9 @@ def sudelete(update,context):
     if (groupid == "-515223688" or str(update.message.from_user.id)=="816970229"):
         try:
             if input:
-                counter =  0
-                global avaList
-                for i in avaList:
-                    if (i["gameName"]==input):
-                        avaList.pop(counter)
-                        # output = """Delete Sucessfully"""
-                        # update.message.reply_text(output)
-                        show(update,context)
-                        break
-                    counter +=1
+                # db.delete_item(input)
+                mdb.delete_user(input)
+                show(update,context)
             else: raise Exception()
         except:
             output = """Error"""
@@ -134,10 +136,10 @@ def sudelete(update,context):
 
 def echo(update, context):
     """Echo the user message."""
-    groupid = update.message.chat.id
-    personalid = update.message.from_user.id
+    groupid = str(update.message.chat.id)
+    personalid = str(update.message.from_user.id)
     output = "Group: "+groupid+" Personal: "+personalid
-    update.message.reply_text(output)
+    print(output)
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -161,7 +163,7 @@ def main():
     dp.add_handler(CommandHandler("delete", delete))
     dp.add_handler(CommandHandler("sushow", sushow))
     dp.add_handler(CommandHandler("sudelete", sudelete))
-    # dp.add_handler(CommandHandler("close", close))
+    dp.add_handler(CommandHandler("close", close))
     dp.add_handler(CommandHandler("echo", echo))
 
     # on noncommand i.e message - echo the message on Telegram
@@ -170,18 +172,21 @@ def main():
     # log all errors
     dp.add_error_handler(error)
 
-    # Start the Bot
+    """Start the Bot by webhook"""
     updater.start_webhook(listen="0.0.0.0",
                           port=int(PORT),
                           url_path=TOKEN)
     updater.bot.setWebhook('https://holanlovehk-tgbot.herokuapp.com/' + TOKEN)
+
+    """start bot by polling (testing code use)"""
+    #updater.start_polling()
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
-    #myid816970229
+    
 
 if __name__ == '__main__':
     main()
